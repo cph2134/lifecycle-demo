@@ -1,25 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import axios from "axios";
+import Pokemon from "./Pokemon";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const myLogger = (message) => {
+  console.log(`%c${message}`, "color: blue");
+};
+class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      pokemonName: "eevee",
+      imgUrl: "",
+    };
+
+    myLogger("constructor");
+  }
+
+  async componentDidMount() {
+    myLogger("componentDidMount");
+    const { data } = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${this.state.pokemonName}`
+    );
+    const imgUrl = data.sprites.front_default;
+    this.setState({ imgUrl });
+  }
+
+  componentDidUpdate() {
+    myLogger("componentDidUpdate");
+  }
+
+  async handleClick(pokemon) {
+    const { data } = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon/${pokemon}`
+    );
+    const imgUrl = data.sprites.front_default;
+    this.setState({ pokemonName: pokemon, imgUrl });
+  }
+
+  clear() {
+    this.setState({ pokemonName: undefined });
+  }
+
+  render() {
+    myLogger("render");
+    return (
+      <div>
+        <h1>{this.state.pokemonName}</h1>
+        <button onClick={() => this.handleClick("pikachu")}>Pikachu</button>
+        <button onClick={() => this.handleClick("meowth")}>Meowth</button>
+        <button onClick={() => this.clear()}>Clear</button>
+
+        {this.state.pokemonName ? (
+          <Pokemon foo={{ text: "bar" }} imgUrl={this.state.imgUrl} />
+        ) : (
+          <div></div>
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
