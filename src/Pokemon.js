@@ -22,12 +22,19 @@ class Pokemon extends React.Component {
     myLogger("componentWillUnmount");
   }
 
+  handleClick() {
+    myLogger("User clicked button!");
+    this.setState({ newValue: "newValue" });
+    this.props.garyCallbackExample("I am a function");
+  }
+
   render() {
     myLogger("render");
     return (
       <div>
         <p>{this.props.foo.text}</p>
         <img src={this.props.imgUrl} />
+        <button onClick={() => this.handleClick()}>Some Button</button>
       </div>
     );
   }

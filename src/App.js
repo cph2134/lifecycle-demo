@@ -30,6 +30,10 @@ class App extends React.Component {
     myLogger("componentDidUpdate");
   }
 
+  parentCallback(someData) {
+    console.log("This is the parten callback", someData);
+  }
+
   async handleClick(pokemon) {
     const { data } = await axios.get(
       `https://pokeapi.co/api/v2/pokemon/${pokemon}`
@@ -52,7 +56,11 @@ class App extends React.Component {
         <button onClick={() => this.clear()}>Clear</button>
 
         {this.state.pokemonName ? (
-          <Pokemon foo={{ text: "bar" }} imgUrl={this.state.imgUrl} />
+          <Pokemon
+            garyCallbackExample={this.parentCallback}
+            foo={{ text: "bar" }}
+            imgUrl={this.state.imgUrl}
+          />
         ) : (
           <div></div>
         )}
